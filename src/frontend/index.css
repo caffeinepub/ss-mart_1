@@ -1,0 +1,83 @@
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/assets/fonts/CabinetGrotesk-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Outfit";
+  src: url("/assets/fonts/Outfit-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* SS Mart — Blue & Orange Retail Theme */
+    --background: 0.98 0.005 260;
+    --foreground: 0.15 0.02 260;
+
+    --card: 1 0 0;
+    --card-foreground: 0.15 0.02 260;
+
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0.02 260;
+
+    /* Primary = Deep Navy Blue */
+    --primary: 0.28 0.1 260;
+    --primary-foreground: 0.98 0 0;
+
+    /* Secondary = Warm Orange */
+    --secondary: 0.65 0.18 50;
+    --secondary-foreground: 1 0 0;
+
+    --muted: 0.94 0.01 260;
+    --muted-foreground: 0.5 0.03 260;
+
+    /* Accent = Bright Orange */
+    --accent: 0.7 0.2 46;
+    --accent-foreground: 1 0 0;
+
+    --destructive: 0.55 0.2 25;
+    --destructive-foreground: 0.98 0 0;
+
+    --border: 0.9 0.01 260;
+    --input: 0.88 0.015 260;
+    --ring: 0.28 0.1 260;
+
+    --radius: 0.75rem;
+
+    --chart-1: 0.65 0.18 50;
+    --chart-2: 0.28 0.1 260;
+    --chart-3: 0.55 0.15 150;
+    --chart-4: 0.6 0.16 300;
+    --chart-5: 0.45 0.12 210;
+
+    --sidebar: 0.98 0.005 260;
+    --sidebar-foreground: 0.15 0.02 260;
+    --sidebar-primary: 0.28 0.1 260;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.94 0.01 260;
+    --sidebar-accent-foreground: 0.15 0.02 260;
+    --sidebar-border: 0.9 0.01 260;
+    --sidebar-ring: 0.28 0.1 260;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
