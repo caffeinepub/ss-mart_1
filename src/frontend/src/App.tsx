@@ -1,3 +1,13 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,6 +51,7 @@ import {
   Menu,
   Minus,
   Package,
+  Pencil,
   Phone,
   Plus,
   QrCode,
@@ -986,6 +997,163 @@ function AddProductDialog({
   );
 }
 
+// ─── Edit Product Dialog ──────────────────────────────────────────────────────
+function EditProductDialog({
+  open,
+  onClose,
+  onEdit,
+  product,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onEdit: (product: Product) => void;
+  product: Product | null;
+}) {
+  const [name, setName] = useState(product?.name ?? "");
+  const [price, setPrice] = useState(
+    product ? product.price.replace(/[^0-9.]/g, "") : "",
+  );
+  const [category, setCategory] = useState(product?.category ?? "");
+  const [badge, setBadge] = useState(product?.badge ?? "");
+
+  // Sync fields when product changes
+  const prevProduct = product;
+  if (
+    product &&
+    (product.name !== prevProduct?.name ||
+      product.category !== prevProduct?.category)
+  ) {
+    // handled by key prop on dialog
+  }
+
+  const handleSave = () => {
+    if (!name.trim()) {
+      toast.error("Enter product name");
+      return;
+    }
+    if (!price.trim() || Number.isNaN(Number(price.replace(/[^0-9]/g, "")))) {
+      toast.error("Enter a valid price");
+      return;
+    }
+    if (!category) {
+      toast.error("Select a category");
+      return;
+    }
+    const priceNum = Number(price.replace(/[^0-9.]/g, ""));
+    onEdit({
+      name: name.trim(),
+      price: `₹${priceNum}`,
+      category,
+      badge: badge.trim() || null,
+    });
+    onClose();
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        if (!v) onClose();
+      }}
+    >
+      <DialogContent
+        className="max-w-sm w-full"
+        data-ocid="admin.edit_product_dialog"
+        key={product?.name}
+      >
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-green-800 font-black">
+            <Pencil className="w-5 h-5 text-orange-500" />
+            Edit Product
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 pt-2">
+          <div className="space-y-1">
+            <Label className="text-xs font-bold text-green-700 uppercase tracking-wider">
+              Product Name
+            </Label>
+            <Input
+              placeholder="e.g. Amul Cheese (200g)"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              data-ocid="admin.edit_product_name_input"
+              className="border-green-200 focus-visible:ring-green-500"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs font-bold text-green-700 uppercase tracking-wider">
+              Price (₹)
+            </Label>
+            <Input
+              placeholder="e.g. 120"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              data-ocid="admin.edit_product_price_input"
+              className="border-green-200 focus-visible:ring-green-500"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs font-bold text-green-700 uppercase tracking-wider">
+              Category
+            </Label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger
+                data-ocid="admin.edit_product_category_select"
+                className="border-green-200 focus:ring-green-500"
+              >
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                {CATEGORY_NAMES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs font-bold text-green-700 uppercase tracking-wider">
+              Badge (optional)
+            </Label>
+            <Select value={badge} onValueChange={setBadge}>
+              <SelectTrigger
+                data-ocid="admin.edit_product_badge_select"
+                className="border-green-200 focus:ring-green-500"
+              >
+                <SelectValue placeholder="No badge" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">No badge</SelectItem>
+                <SelectItem value="Fresh">Fresh</SelectItem>
+                <SelectItem value="Popular">Popular</SelectItem>
+                <SelectItem value="New">New</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex gap-2 pt-1">
+            <Button
+              variant="outline"
+              className="flex-1 border-gray-300"
+              onClick={onClose}
+              data-ocid="admin.edit_product_cancel_button"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold"
+              onClick={handleSave}
+              data-ocid="admin.edit_product_submit_button"
+            >
+              Save Changes
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -1001,6 +1169,11 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
   const [addProductOpen, setAddProductOpen] = useState(false);
+  const [editProductOpen, setEditProductOpen] = useState(false);
+  const [editProductIndex, setEditProductIndex] = useState<number | null>(null);
+  const [deleteProductIndex, setDeleteProductIndex] = useState<number | null>(
+    null,
+  );
 
   const subtotal = cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const deliveryCharge =
@@ -1070,6 +1243,23 @@ export default function App() {
     setProducts((prev) => [product, ...prev]);
   };
 
+  const handleEditProduct = (updated: Product, index: number) => {
+    setProducts((prev) => {
+      const next = [...prev];
+      next[index] = updated;
+      return next;
+    });
+    toast.success("Product updated!");
+    setEditProductOpen(false);
+    setEditProductIndex(null);
+  };
+
+  const handleDeleteProduct = (index: number) => {
+    setProducts((prev) => prev.filter((_, i) => i !== index));
+    toast.success("Product deleted!");
+    setDeleteProductIndex(null);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Toaster position="top-right" />
@@ -1085,6 +1275,56 @@ export default function App() {
         onClose={() => setAddProductOpen(false)}
         onAdd={handleAddProduct}
       />
+      <EditProductDialog
+        open={editProductOpen}
+        onClose={() => {
+          setEditProductOpen(false);
+          setEditProductIndex(null);
+        }}
+        onEdit={(updated) => {
+          if (editProductIndex !== null)
+            handleEditProduct(updated, editProductIndex);
+        }}
+        product={editProductIndex !== null ? products[editProductIndex] : null}
+      />
+      <AlertDialog
+        open={deleteProductIndex !== null}
+        onOpenChange={(v) => {
+          if (!v) setDeleteProductIndex(null);
+        }}
+      >
+        <AlertDialogContent data-ocid="admin.delete_confirm_dialog">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-red-700">
+              Delete Product?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete{" "}
+              <span className="font-bold text-foreground">
+                {deleteProductIndex !== null
+                  ? products[deleteProductIndex]?.name
+                  : ""}
+              </span>
+              ? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-ocid="admin.delete_cancel_button">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              data-ocid="admin.delete_confirm_button"
+              onClick={() => {
+                if (deleteProductIndex !== null)
+                  handleDeleteProduct(deleteProductIndex);
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Cart Drawer */}
       <CartDrawer
@@ -1556,6 +1796,33 @@ export default function App() {
                             Add to Cart
                           </Button>
                         </div>
+                        {isAdmin && (
+                          <div className="flex gap-2 pt-3 border-t border-gray-100">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="flex-1 border-green-300 text-green-700 hover:bg-green-50 gap-1.5"
+                              data-ocid={`admin.product_edit_button.${i + 1}`}
+                              onClick={() => {
+                                setEditProductIndex(i);
+                                setEditProductOpen(true);
+                              }}
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                              Edit
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="flex-1 border-red-300 text-red-600 hover:bg-red-50 gap-1.5"
+                              data-ocid={`admin.product_delete_button.${i + 1}`}
+                              onClick={() => setDeleteProductIndex(i)}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              Delete
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   ))}
@@ -1676,14 +1943,15 @@ export default function App() {
               reserved.
             </span>
             <div className="flex items-center gap-4">
-              {/* Hidden admin login trigger */}
+              {/* Admin login trigger */}
               <button
                 type="button"
                 onClick={() => setAdminLoginOpen(true)}
-                className="opacity-0 hover:opacity-100 transition-opacity text-white/30 hover:text-white/60 flex items-center gap-1"
+                className="flex flex-col items-center gap-0.5 text-white/60 hover:text-white transition-colors"
                 data-ocid="admin.login_trigger_button"
-                title="Admin"
+                title="Admin Login"
               >
+                <span className="text-xs font-medium">Admin Login</span>
                 <Lock className="w-3 h-3" />
               </button>
               <a
