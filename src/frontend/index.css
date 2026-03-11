@@ -18,54 +18,54 @@
 
 @layer base {
   :root {
-    /* SS Mart — Blue & Orange Retail Theme */
-    --background: 0.98 0.005 260;
-    --foreground: 0.15 0.02 260;
+    /* SS Mart — Forest Green & Sunrise Orange */
+    --background: 0.98 0.005 140;
+    --foreground: 0.12 0.04 150;
 
     --card: 1 0 0;
-    --card-foreground: 0.15 0.02 260;
+    --card-foreground: 0.12 0.04 150;
 
     --popover: 1 0 0;
-    --popover-foreground: 0.15 0.02 260;
+    --popover-foreground: 0.12 0.04 150;
 
-    /* Primary = Deep Navy Blue */
-    --primary: 0.28 0.1 260;
+    /* Primary = Deep Forest Green */
+    --primary: 0.32 0.1 155;
     --primary-foreground: 0.98 0 0;
 
-    /* Secondary = Warm Orange */
-    --secondary: 0.65 0.18 50;
-    --secondary-foreground: 1 0 0;
+    /* Secondary = Soft Green tint */
+    --secondary: 0.92 0.05 150;
+    --secondary-foreground: 0.25 0.08 155;
 
-    --muted: 0.94 0.01 260;
-    --muted-foreground: 0.5 0.03 260;
+    --muted: 0.95 0.02 150;
+    --muted-foreground: 0.48 0.04 150;
 
-    /* Accent = Bright Orange */
-    --accent: 0.7 0.2 46;
+    /* Accent = Sunrise Orange */
+    --accent: 0.68 0.2 46;
     --accent-foreground: 1 0 0;
 
-    --destructive: 0.55 0.2 25;
+    --destructive: 0.55 0.22 25;
     --destructive-foreground: 0.98 0 0;
 
-    --border: 0.9 0.01 260;
-    --input: 0.88 0.015 260;
-    --ring: 0.28 0.1 260;
+    --border: 0.9 0.02 150;
+    --input: 0.88 0.02 150;
+    --ring: 0.32 0.1 155;
 
     --radius: 0.75rem;
 
-    --chart-1: 0.65 0.18 50;
-    --chart-2: 0.28 0.1 260;
-    --chart-3: 0.55 0.15 150;
-    --chart-4: 0.6 0.16 300;
-    --chart-5: 0.45 0.12 210;
+    --chart-1: 0.68 0.2 46;
+    --chart-2: 0.32 0.1 155;
+    --chart-3: 0.55 0.15 200;
+    --chart-4: 0.6 0.16 90;
+    --chart-5: 0.45 0.12 300;
 
-    --sidebar: 0.98 0.005 260;
-    --sidebar-foreground: 0.15 0.02 260;
-    --sidebar-primary: 0.28 0.1 260;
+    --sidebar: 0.98 0.005 140;
+    --sidebar-foreground: 0.12 0.04 150;
+    --sidebar-primary: 0.32 0.1 155;
     --sidebar-primary-foreground: 0.98 0 0;
-    --sidebar-accent: 0.94 0.01 260;
-    --sidebar-accent-foreground: 0.15 0.02 260;
-    --sidebar-border: 0.9 0.01 260;
-    --sidebar-ring: 0.28 0.1 260;
+    --sidebar-accent: 0.95 0.02 150;
+    --sidebar-accent-foreground: 0.12 0.04 150;
+    --sidebar-border: 0.9 0.02 150;
+    --sidebar-ring: 0.32 0.1 155;
   }
 
   * {
